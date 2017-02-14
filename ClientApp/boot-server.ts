@@ -1,9 +1,9 @@
-import 'angular2-universal-polyfills';
-import 'zone.js';
-import { createServerRenderer, RenderResult } from 'aspnet-prerendering';
-import { enableProdMode } from '@angular/core';
-import { platformNodeDynamic } from 'angular2-universal';
-import { AppModule } from './app/app.module';
+import "angular2-universal-polyfills";
+import "zone.js";
+import { createServerRenderer, RenderResult } from "aspnet-prerendering";
+import { enableProdMode } from "@angular/core";
+import { platformNodeDynamic } from "angular2-universal";
+import { AppModule } from "./app/app.module";
 
 enableProdMode();
 const platform = platformNodeDynamic();
@@ -11,13 +11,13 @@ const platform = platformNodeDynamic();
 export default createServerRenderer(params => {
     return new Promise<RenderResult>((resolve, reject) => {
         const requestZone = Zone.current.fork({
-            name: 'angular-universal request',
+            name: "angular-universal request",
             properties: {
-                baseUrl: '/',
+                baseUrl: "/",
                 requestUrl: params.url,
                 originUrl: params.origin,
                 preboot: false,
-                document: '<app></app>'
+                document: "<app></app>"
             },
             onHandleError: (parentZone, currentZone, targetZone, error) => {
                 // If any error occurs while rendering the module, reject the whole operation

@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using ASPNetCoreAngular2YoExample.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.SpaServices.Webpack;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -13,7 +15,7 @@ using Microsoft.Extensions.Logging;
 
 namespace ASPNetCoreAngular2YoExample
 {
-    public class Startup
+    public partial class Startup
     {
         public Startup(IHostingEnvironment env)
         {
@@ -25,7 +27,7 @@ namespace ASPNetCoreAngular2YoExample
             Configuration = builder.Build();
         }
 
-        public IConfigurationRoot Configuration { get; }
+        private IConfigurationRoot Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -35,6 +37,10 @@ namespace ASPNetCoreAngular2YoExample
 
             services.AddDbContext<ApplicationDbContext>(
                 opts => opts.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
+
+            services.AddIdentity<IdentityUser, IdentityRole>()
+                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddDefaultTokenProviders();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -55,17 +61,19 @@ namespace ASPNetCoreAngular2YoExample
                 app.UseExceptionHandler("/Home/Error");
             }
 
+            ConfigureAuth(app);
+            
             app.UseStaticFiles();
-
+            app.UseIdentity();
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
-
+                    "default",
+                    "{controller=Home}/{action=Index}/{id?}");
+            
                 routes.MapSpaFallbackRoute(
-                    name: "spa-fallback",
-                    defaults: new { controller = "Home", action = "Index" });
+                    "spa-fallback",
+                    new { controller = "Home", action = "Index" });
             });
 
             // Create database on startup  

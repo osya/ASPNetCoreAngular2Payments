@@ -1,0 +1,5 @@
+﻿<div *ngIf="message" [ngClass]="{ 'alert': message, 'alert-success': message.type === 'success', 'alert-danger': message.type === 'error' }">
+    <div *ngFor="let item of message.text">
+        {{item}}
+    </div>
+</div>
