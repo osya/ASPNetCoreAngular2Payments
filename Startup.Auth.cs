@@ -5,6 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using ASPNetCoreAngular2YoExample.SimpleTokenProvider;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 
 namespace ASPNetCoreAngular2YoExample
@@ -18,16 +21,7 @@ namespace ASPNetCoreAngular2YoExample
         private void ConfigureAuth(IApplicationBuilder app)
         {
             var signingKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(SecretKey));
-
-            app.UseSimpleTokenProvider(new TokenProviderOptions
-            {
-                Path = "/api/authenticate",
-                Audience = "ExampleAudience",
-                Issuer = "ExampleIssuer",
-                SigningCredentials = new SigningCredentials(signingKey, SecurityAlgorithms.HmacSha256),
-                IdentityResolver = GetIdentity
-            });
-
+            
             var tokenValidationParameters = new TokenValidationParameters
             {
                 // The signing key must match!
@@ -56,6 +50,17 @@ namespace ASPNetCoreAngular2YoExample
                 TokenValidationParameters = tokenValidationParameters
             });
 
+            var userManager = app.ApplicationServices.GetService<UserManager<IdentityUser>>();
+
+            app.UseSimpleTokenProvider(new TokenProviderOptions
+            {
+                Path = "/api/authenticate",
+                Audience = "ExampleAudience",
+                Issuer = "ExampleIssuer",
+                SigningCredentials = new SigningCredentials(signingKey, SecurityAlgorithms.HmacSha256),
+                IdentityResolver = (username, password) => GetIdentity(userManager, username, password)
+            });
+
             app.UseCookieAuthentication(new CookieAuthenticationOptions
             {
                 AutomaticAuthenticate = true,
@@ -68,16 +73,11 @@ namespace ASPNetCoreAngular2YoExample
             });
         }
 
-        private Task<ClaimsIdentity> GetIdentity(string username, string password)
+        private static async Task<ClaimsIdentity> GetIdentity(UserManager<IdentityUser> userManager, string email, string password)
         {
-            // Don't do this in production, obviously!
-            if (username == "TEST" && password == "TEST123")
-            {
-                return Task.FromResult(new ClaimsIdentity(new GenericIdentity(username, "Token"), new Claim[] { }));
-            }
-
-            // Credentials are invalid, or account doesn't exist
-            return Task.FromResult<ClaimsIdentity>(null);
+            var user = await userManager.FindByEmailAsync(email);
+            var result = await userManager.CheckPasswordAsync(user, password);
+            return result ? new ClaimsIdentity(new GenericIdentity(email, "Token"), new[] { new Claim("user_name", user.UserName), new Claim("user_id", user.Id) }) : new ClaimsIdentity();
         }
     }
 }

@@ -2,7 +2,7 @@
 import { Router, ActivatedRoute } from "@angular/router";
 
 import { IUser } from "../../../models/user.interface";
-import { AuthenticationService } from "../../../services/authentication.service";
+import { AlertService, AuthenticationService } from "../../../services";
 
 @Component({
     selector: "login",
@@ -17,7 +17,7 @@ export class LoginComponent implements OnInit {
         private readonly route: ActivatedRoute,
         private readonly router: Router,
         private readonly authenticationService: AuthenticationService,
-//        private alertService: AlertService
+        private alertService: AlertService
     ) { }
 
     ngOnInit() {
@@ -41,8 +41,8 @@ export class LoginComponent implements OnInit {
             () => {
                 this.router.navigate([this.returnUrl]);
             },
-            () => {
-//                this.alertService.error(error);
+            error => {
+                this.alertService.error(error);
                 this.loading = false;
             });
     }
