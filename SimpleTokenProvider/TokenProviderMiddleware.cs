@@ -71,6 +71,7 @@ namespace ASPNetCoreAngular2YoExample.SimpleTokenProvider
             var identity = await _options.IdentityResolver(email, password);
             if (identity == null)
             {
+                _logger.LogInformation($"Invalid email ({email}) or password ({password})");
                 context.Response.StatusCode = 400;
                 await context.Response.WriteAsync("Invalid email or password.");
                 return;

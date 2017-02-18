@@ -1,8 +1,15 @@
-<div class="col-md-6 col-md-offset-3">
-    <!--    <h1>Hi {{currentUser.firstName}}!</h1>-->
-    <p>You're logged in with Angular 2!!</p>
-    <p><a [routerLink]="['/login']">Login</a></p>
-    <p><a [routerLink]="['/register']">Register</a></p>
+<div *ngIf="auth.isLoggedIn()">
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#">Hi, {{currentUser.email}}!</a>
+            </div>
+            <ul class="nav navbar-nav">
+                <li class="active"><a href="#">Home</a></li>
+                <li><a [routerLink]="['/login']">Logout</a></li>
+            </ul>
+        </div>
+    </nav>
 </div>
 
 <p>Welcome to your new single-page application, built with:</p>

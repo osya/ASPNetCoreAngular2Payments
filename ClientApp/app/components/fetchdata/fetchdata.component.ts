@@ -1,17 +1,25 @@
 import { Component } from "@angular/core";
-import { Http } from "@angular/http";
+import { AuthHttp } from "angular2-jwt";
+import { Alert } from "../../services";
+import "rxjs/add/operator/finally";
 
 @Component({
     selector: "fetchdata",
-    templateUrl: "./fetchdata.component.html"
+    templateUrl: "./fetchdata.component.html",
 })
 export class FetchDataComponent {
-    public forecasts: IWeatherForecast[];
+    forecasts: IWeatherForecast[];
+    loading = true;
 
-    constructor(http: Http) {
-        http.get("/api/SampleData/WeatherForecasts").subscribe(result => {
-            this.forecasts = result.json() as IWeatherForecast[];
-        });
+    constructor(private readonly authHttp: AuthHttp, private readonly alert: Alert) {}
+
+    ngOnInit() {
+        this.authHttp.get("/api/SampleData/WeatherForecasts")
+            .finally(() => this.loading = false )
+            .subscribe(
+            result => this.forecasts = result.json() as IWeatherForecast[],
+            err => this.alert.error(err.toString())
+        );
     }
 }
 

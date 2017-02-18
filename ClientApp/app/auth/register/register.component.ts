@@ -1,8 +1,9 @@
 ﻿import { Component, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
 
-import { IUser } from "../../../models/user.interface";
-import { AlertService, UserService } from "../../../services/";
+import { IUser } from "../../models/user.interface";
+import { Auth } from ".."
+import { Alert } from "../../services/";
 
 @Component({
     selector: "register",
@@ -14,8 +15,8 @@ export class RegisterComponent implements OnInit {
 
     constructor(
         private readonly router: Router,
-        private readonly userService: UserService,
-        private readonly alertService: AlertService
+        private readonly auth: Auth,
+        private readonly alert: Alert
     ) { }
 
     ngOnInit() {
@@ -28,15 +29,15 @@ export class RegisterComponent implements OnInit {
 
     register() {
         this.loading = true;
-        this.userService.create(this.user)
+        this.auth.signUp(this.user)
             .subscribe(
             () => {
                 // set success message and pass true paramater to persist the message after redirecting to the login page
-                this.alertService.success("Registration successful", true);
+                this.alert.success("Registration successful", true);
                 this.router.navigate(["/login"]);
             },
-            error => {
-                this.alertService.error(error);
+            err => {
+                this.alert.error(err);
                 this.loading = false;
             });
     }

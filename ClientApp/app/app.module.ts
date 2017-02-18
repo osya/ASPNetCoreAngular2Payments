@@ -1,7 +1,8 @@
 import { NgModule } from "@angular/core";
 import { RouterModule } from "@angular/router";
 import { UniversalModule } from "angular2-universal";
-import { LocalStorageModule } from "angular-2-local-storage";
+import { LocalStorageModule, LocalStorageService } from "angular-2-local-storage";
+//import { Store } from "./components/universal-store/universal-store";
 import { FormsModule } from "@angular/forms";
 
 import { AlertComponent } from "./components/alert/alert.component";
@@ -11,11 +12,13 @@ import { HomeComponent } from "./components/home/home.component";
 import { FetchDataComponent } from "./components/fetchdata/fetchdata.component";
 import { CounterComponent } from "./components/counter/counter.component";
 import { SearchboxComponent } from "./components/searchbox/searchbox.component";
-import { LoginComponent } from "./components/auth/login/login.component";
-import { RegisterComponent } from "./components/auth/register/register.component";
-import { CustomFormsModule } from "ng2-validation"
 
-import { AuthenticationService, UserService, AlertService } from "./services/";
+import { AuthModule } from "./auth/auth.module";
+import { AuthGuard } from "./auth/auth.guard";
+import { Http, RequestOptions } from "@angular/http";
+import { AuthHttp, AuthConfig } from "angular2-jwt";
+import { Auth } from "./auth/services/";
+import { Alert } from "./services/";
 
 @NgModule({
     bootstrap: [ AppComponent ],
@@ -26,10 +29,8 @@ import { AuthenticationService, UserService, AlertService } from "./services/";
         CounterComponent,
         FetchDataComponent,
         HomeComponent,
-        SearchboxComponent,
-        // TODO: Join LoginComponent & RegisterComponent into one AuthComponent
-        LoginComponent,
-        RegisterComponent
+        SearchboxComponent
+//        Store
     ],
     imports: [
         UniversalModule, // must be first import. This automatically imports BrowserModule, HttpModule, and JsonpModule too.
@@ -39,21 +40,32 @@ import { AuthenticationService, UserService, AlertService } from "./services/";
         }),
         RouterModule.forRoot([
             { path: "", redirectTo: "home", pathMatch: "full" },
-            { path: "home", component: HomeComponent },
+            { path: "home", component: HomeComponent, canActivate: [AuthGuard] },
             { path: "counter", component: CounterComponent },
             { path: "fetch-data", component: FetchDataComponent },
             { path: "search", component: SearchboxComponent },
-            { path: "login", component: LoginComponent },
-            { path: "register", component: RegisterComponent },
             { path: "**", redirectTo: "home" }
         ]),
         FormsModule,
-        CustomFormsModule
+        AuthModule
     ],
     providers: [
-        AuthenticationService,
-        UserService,
-        AlertService
+        {
+            provide: AuthHttp,
+            useFactory: (http: Http, options: RequestOptions, localStorageService: LocalStorageService) => {
+                return new AuthHttp(new AuthConfig({
+                    tokenName: "id_token",
+                    tokenGetter: (() => localStorageService.get<string>("id_token")),
+                    globalHeaders: [{ 'Content-Type': "application/json" }],
+                    noJwtError: true
+                }), http, options);
+            },
+            deps: [Http, RequestOptions, LocalStorageService]
+        },
+        Alert,
+        Auth,
+        AuthGuard,
+        LocalStorageService
     ]
 })
 export class AppModule {

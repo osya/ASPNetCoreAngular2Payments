@@ -1,8 +1,10 @@
 ﻿import { Component, OnInit } from "@angular/core";
 import { Router, ActivatedRoute } from "@angular/router";
+import { isBrowser, isNode } from "angular2-universal";
 
-import { IUser } from "../../../models/user.interface";
-import { AlertService, AuthenticationService } from "../../../services";
+import { IUser } from "../../models/user.interface";
+import { Auth } from ".."
+import { Alert } from "../../services";
 
 @Component({
     selector: "login",
@@ -16,8 +18,8 @@ export class LoginComponent implements OnInit {
     constructor(
         private readonly route: ActivatedRoute,
         private readonly router: Router,
-        private readonly authenticationService: AuthenticationService,
-        private alertService: AlertService
+        private readonly auth: Auth,
+        private readonly alert: Alert,
     ) { }
 
     ngOnInit() {
@@ -26,9 +28,9 @@ export class LoginComponent implements OnInit {
             password: "",
             confirmPassword: ""
         }
-
-        // reset login status
-        this.authenticationService.logout();
+        if (isBrowser) {
+            this.auth.logout();
+        }
 
         // get return url from route parameters or default to '/'
         this.returnUrl = this.route.snapshot.queryParams["returnUrl"] || "/";
@@ -36,13 +38,13 @@ export class LoginComponent implements OnInit {
 
     login() {
         this.loading = true;
-        this.authenticationService.login(this.user.email, this.user.password)
+        this.auth.login(this.user)
             .subscribe(
             () => {
                 this.router.navigate([this.returnUrl]);
             },
-            error => {
-                this.alertService.error(error);
+            err => {
+                this.alert.error(err.text());
                 this.loading = false;
             });
     }
