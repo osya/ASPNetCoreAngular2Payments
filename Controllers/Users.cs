@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using ASPNetCoreAngular2YoExample.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
@@ -49,6 +50,7 @@ namespace ASPNetCoreAngular2YoExample.Controllers
 
         // POST api/values
         [HttpPost]
+        [AllowAnonymous]
         public async Task<ActionResult> Post([FromBody]UserViewModel model)
         {
             if (ModelState.IsValid)

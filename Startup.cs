@@ -1,12 +1,7 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using ASPNetCoreAngular2YoExample.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.AspNetCore.SpaServices.Webpack;
@@ -70,10 +65,10 @@ namespace ASPNetCoreAngular2YoExample
                 app.UseExceptionHandler("/Home/Error");
             }
 
+            app.UseIdentity();
             ConfigureAuth(app);
             
             app.UseStaticFiles();
-            app.UseIdentity();
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
