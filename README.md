@@ -6,3 +6,5 @@ Before creating Docker container:
  - node node_modules/webpack/bin/webpack.js --env.prod
 
 docker-compose up
+
+http://192.168.99.100/

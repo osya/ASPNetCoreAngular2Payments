@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "ASPNetCoreAngular2YoExample", "ASPNetCoreAngular2YoExample.xproj", "{52470372-7B49-4B2B-B0B1-B11CC5ED2EE2}"
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "ASPNetCoreAngular2Payments", "ASPNetCoreAngular2Payments.xproj", "{52470372-7B49-4B2B-B0B1-B11CC5ED2EE2}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{04BC09C1-904D-4712-9D3F-9208F1083612}"
 	ProjectSection(SolutionItems) = preProject

@@ -5,7 +5,7 @@ import "rxjs/add/operator/finally";
 
 @Component({
     selector: "fetchdata",
-    templateUrl: "./fetchdata.component.html",
+    templateUrl: "./fetchdata.component.html"
 })
 export class FetchDataComponent {
     forecasts: IWeatherForecast[];

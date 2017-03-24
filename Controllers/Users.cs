@@ -100,16 +100,23 @@ namespace ASPNetCoreAngular2YoExample.Controllers
                 .ToDictionary(pair => pair.Key, pair => pair.Value.Errors.Select(error => error.ErrorMessage)));
         }
 
+        [HttpGet("version")]
+        [AllowAnonymous]
+        public IActionResult MyResult()
+        {
+            return Ok();
+        }
+
         // PUT api/values/5
-//        [HttpPut("{id}")]
-//        public void Put(int id, [FromBody]string value)
-//        {
-//        }
+        //        [HttpPut("{id}")]
+        //        public void Put(int id, [FromBody]string value)
+        //        {
+        //        }
 
         // DELETE api/values/5
-//        [HttpDelete("{id}")]
-//        public void Delete(int id)
-//        {
-//        }
+        //        [HttpDelete("{id}")]
+        //        public void Delete(int id)
+        //        {
+        //        }
     }
 }

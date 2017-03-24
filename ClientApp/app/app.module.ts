@@ -12,6 +12,7 @@ import { HomeComponent } from "./components/home/home.component";
 import { FetchDataComponent } from "./components/fetchdata/fetchdata.component";
 import { CounterComponent } from "./components/counter/counter.component";
 import { SearchboxComponent } from "./components/searchbox/searchbox.component";
+import { StripeFormComponent } from "./components/purchase/stripe-form.component";
 
 import { AuthModule } from "./auth/auth.module";
 import { AuthGuard } from "./auth/auth.guard";
@@ -29,7 +30,8 @@ import { Alert } from "./services/";
         CounterComponent,
         FetchDataComponent,
         HomeComponent,
-        SearchboxComponent
+        SearchboxComponent,
+        StripeFormComponent
 //        Store
     ],
     imports: [
@@ -44,6 +46,7 @@ import { Alert } from "./services/";
             { path: "counter", component: CounterComponent },
             { path: "fetch-data", component: FetchDataComponent },
             { path: "search", component: SearchboxComponent },
+            { path: "purchase", component: StripeFormComponent },
             { path: "**", redirectTo: "home" }
         ]),
         FormsModule,
