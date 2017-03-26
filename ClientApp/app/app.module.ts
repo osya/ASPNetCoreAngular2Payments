@@ -3,7 +3,7 @@ import { RouterModule } from "@angular/router";
 import { UniversalModule } from "angular2-universal";
 import { LocalStorageModule, LocalStorageService } from "angular-2-local-storage";
 //import { Store } from "./components/universal-store/universal-store";
-import { FormsModule } from "@angular/forms";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 
 import { AlertComponent } from "./components/alert/alert.component";
 import { AppComponent } from "./components/app/app.component";
@@ -13,6 +13,7 @@ import { FetchDataComponent } from "./components/fetchdata/fetchdata.component";
 import { CounterComponent } from "./components/counter/counter.component";
 import { SearchboxComponent } from "./components/searchbox/searchbox.component";
 import { StripeFormComponent } from "./components/purchase/stripe-form.component";
+import { StripeCustomFormComponent } from "./components/purchase/stripe-custom-form.component";
 
 import { AuthModule } from "./auth/auth.module";
 import { AuthGuard } from "./auth/auth.guard";
@@ -31,7 +32,8 @@ import { Alert } from "./services/";
         FetchDataComponent,
         HomeComponent,
         SearchboxComponent,
-        StripeFormComponent
+        StripeFormComponent,
+        StripeCustomFormComponent
 //        Store
     ],
     imports: [
@@ -46,10 +48,12 @@ import { Alert } from "./services/";
             { path: "counter", component: CounterComponent },
             { path: "fetch-data", component: FetchDataComponent },
             { path: "search", component: SearchboxComponent },
-            { path: "purchase", component: StripeFormComponent },
+            { path: "stripe-default-purchase", component: StripeFormComponent },
+            { path: "stripe-custom-purchase", component: StripeCustomFormComponent },
             { path: "**", redirectTo: "home" }
         ]),
         FormsModule,
+        ReactiveFormsModule,
         AuthModule
     ],
     providers: [

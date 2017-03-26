@@ -32,9 +32,14 @@
                         <span class="glyphicon glyphicon-search"></span> Search
                     </a>
                 </li>
-                <li [routerLinkActive]="['purchase']">
-                    <a [routerLink]="['/purchase']">
-                        <span class="glyphicon glyphicon-th-list"></span> Purchase
+                <li [routerLinkActive]="['stripe-default-purchase']">
+                    <a [routerLink]="['/stripe-default-purchase']">
+                        <span class="glyphicon glyphicon-th-list"></span> Stripe Default Purchase
+                    </a>
+                </li>
+                <li [routerLinkActive]="['stripe-custom-purchase']">
+                    <a [routerLink]="['/stripe-custom-purchase']">
+                        <span class="glyphicon glyphicon-th-list"></span> Stripe Custom Purchase
                     </a>
                 </li>
             </ul>
