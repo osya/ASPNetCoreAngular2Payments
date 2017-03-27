@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http.Authentication;
 using Microsoft.IdentityModel.Tokens;
 
-namespace ASPNetCoreAngular2YoExample.SimpleTokenProvider
+namespace ASPNetCoreAngular2Payments.SimpleTokenProvider
 {
     public class CustomJwtDataFormat : ISecureDataFormat<AuthenticationTicket>
     {
@@ -30,7 +30,7 @@ namespace ASPNetCoreAngular2YoExample.SimpleTokenProvider
             {
                 SecurityToken validToken;
                 principal = handler.ValidateToken(protectedText, _validationParameters, out validToken);
-                
+
                 var validJwt = validToken as JwtSecurityToken;
 
                 if (validJwt == null)

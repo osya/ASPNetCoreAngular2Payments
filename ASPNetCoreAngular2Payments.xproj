@@ -8,7 +8,7 @@
   <Import Project="$(VSToolsPath)\DotNet\Microsoft.DotNet.Props" Condition="'$(VSToolsPath)' != ''" />
   <PropertyGroup Label="Globals">
     <ProjectGuid>52470372-7b49-4b2b-b0b1-b11cc5ed2ee2</ProjectGuid>
-    <RootNamespace>ASPNetCoreAngular2YoExample</RootNamespace>
+    <RootNamespace>ASPNetCoreAngular2Payments</RootNamespace>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup>

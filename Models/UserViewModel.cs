@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ASPNetCoreAngular2YoExample.Models
+namespace ASPNetCoreAngular2Payments.Models
 {
     public class UserViewModel
     {

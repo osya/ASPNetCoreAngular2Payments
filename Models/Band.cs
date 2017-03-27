@@ -1,4 +1,4 @@
-﻿namespace ASPNetCoreAngular2YoExample.Models
+﻿namespace ASPNetCoreAngular2Payments.Models
 {
     public class Band
     {

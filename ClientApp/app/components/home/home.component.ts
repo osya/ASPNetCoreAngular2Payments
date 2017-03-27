@@ -6,6 +6,7 @@ import { IUser } from "../../models/user.interface";
 import { Auth } from "../../auth/services/";
 
 @Component({
+    selector: "home",
     templateUrl: "./home.component.html"
 })
 export class HomeComponent {

@@ -1,4 +1,4 @@
-using ASPNetCoreAngular2YoExample.Models;
+using ASPNetCoreAngular2Payments.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -10,7 +10,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
-namespace ASPNetCoreAngular2YoExample
+namespace ASPNetCoreAngular2Payments
 {
     public partial class Startup
     {
@@ -67,23 +67,23 @@ namespace ASPNetCoreAngular2YoExample
 
             app.UseIdentity();
             ConfigureAuth(app);
-            
+
             app.UseStaticFiles();
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
                     "default",
                     "{controller=Home}/{action=Index}/{id?}");
-            
+
                 routes.MapSpaFallbackRoute(
                     "spa-fallback",
                     new { controller = "Home", action = "Index" });
             });
 
-            // Create database on startup  
+            // Create database on startup
             using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
             {
-                serviceScope.ServiceProvider.GetService<ApplicationDbContext>().Database.Migrate();
+                 serviceScope.ServiceProvider.GetService<ApplicationDbContext>().Database.Migrate();
             }
         }
     }

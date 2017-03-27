@@ -1,18 +1,24 @@
-var IsDevBuild = process.argv.indexOf("--env.prod") < 0;
-var Path = require("path");
-var Webpack = require("webpack");
-var ExtractTextPlugin = require("extract-text-webpack-plugin");
-var Merge = require("webpack-merge");
-var ExtractCss = new ExtractTextPlugin("vendor.css");
+const isDevBuild = process.argv.indexOf("--env.prod") < 0;
+const path = require("path");
+const webpack = require("webpack");
+const ExtractTextPlugin = require("extract-text-webpack-plugin");
+const merge = require("webpack-merge");
 
 (function(webpack1) {
-    (function(webpack, optimize) {
+    (function(webpack2, optimize) {
         const sharedConfig = {
-            resolve: { extensions: ["", ".js"] },
+            resolve: { extensions: [ ".js" ] },
             module: {
-                loaders: [
-                    { test: /\.json$/, loader: require.resolve("json-loader") },
-                    { test: /\.(png|woff|woff2|eot|ttf|svg)(\?|$)/, loader: "url-loader?limit=100000" }
+                rules: [
+                    {
+                        test: /\.(png|woff|woff2|eot|ttf|svg)(\?|$)/,
+                        use: {
+                                loader: "url-loader",
+                                options: {
+                                    limit: 100000
+                                }
+                            }
+                    }
                 ]
             },
             entry: {
@@ -42,51 +48,61 @@ var ExtractCss = new ExtractTextPlugin("vendor.css");
                 library: "[name]_[hash]"
             },
             plugins: [
-                new webpack.ProvidePlugin({ $: "jquery", jQuery: "jquery" }), // Maps these identifiers to the jQuery package (because Bootstrap expects it to be a global variable)
-                new webpack.ContextReplacementPlugin(/\@angular\b.*\b(bundles|linker)/,
-                    Path.join(__dirname, "./ClientApp")), // Workaround for https://github.com/angular/angular/issues/11580
-                new webpack.IgnorePlugin(/^vertx$/), // Workaround for https://github.com/stefanpenner/es6-promise/issues/100
-                new webpack.NormalModuleReplacementPlugin(/\/iconv-loader$/, require.resolve("node-noop")), // Workaround for https://github.com/andris9/encoding/issues/16
+                new webpack2.ProvidePlugin({ $: "jquery", jQuery: "jquery" }), // Maps these identifiers to the jQuery package (because Bootstrap expects it to be a global variable)
+                new webpack2.ContextReplacementPlugin(/\@angular\b.*\b(bundles|linker)/,
+                    path.join(__dirname, "./ClientApp")), // Workaround for https://github.com/angular/angular/issues/11580
+                new webpack2.IgnorePlugin(/^vertx$/), // Workaround for https://github.com/stefanpenner/es6-promise/issues/100
+                new webpack2.NormalModuleReplacementPlugin(/\/iconv-loader$/, require.resolve("node-noop")) // Workaround for https://github.com/andris9/encoding/issues/16
             ]
         };
 
-        const clientBundleConfig = Merge(sharedConfig,
+        const clientBundleConfig = merge(sharedConfig,
         {
-            output: { path: Path.join(__dirname, "wwwroot", "dist") },
+            output: { path: path.join(__dirname, "wwwroot", "dist") },
             module: {
-                loaders: [
-                    { test: /\.css(\?|$)/, loader: ExtractCss.extract(["css-loader"]) }
+                rules: [
+                    {
+                        test: /\.css(\?|$)/,
+                        use: ExtractTextPlugin.extract({
+                            use: "css-loader"
+                        })
+                    }
                 ]
             },
             plugins: [
-                ExtractCss,
+                new ExtractTextPlugin({ filename: "vendor.css" }),
                 new webpack.DllPlugin({
-                    path: Path.join(__dirname, "wwwroot", "dist", "[name]-manifest.json"),
+                    path: path.join(__dirname, "wwwroot", "dist", "[name]-manifest.json"),
                     name: "[name]_[hash]"
                 })
-            ].concat(IsDevBuild
+            ].concat(isDevBuild
                 ? []
                 : [
-                    new optimize.OccurenceOrderPlugin(),
-                    new optimize.UglifyJsPlugin({ compress: { warnings: false } })
+                    new optimize.UglifyJsPlugin()
                 ])
         });
 
-        const serverBundleConfig = Merge(sharedConfig,
+        const serverBundleConfig = merge(sharedConfig,
         {
             target: "node",
-            resolve: { packageMains: ["main"] },
+            resolve: { mainFields: ["main"] },
             output: {
-                path: Path.join(__dirname, "ClientApp", "dist"),
+                path: path.join(__dirname, "ClientApp", "dist"),
                 libraryTarget: "commonjs2"
             },
             module: {
-                loaders: [{ test: /\.css(\?|$)/, loader: "to-string-loader!css-loader" }]
+                rules: [{
+                    test: /\.css(\?|$)/,
+                    use: [
+                        "to-string-loader",
+                        "css-loader"
+                    ]
+                }]
             },
             entry: { vendor: ["aspnet-prerendering"] },
             plugins: [
-                new webpack.DllPlugin({
-                    path: Path.join(__dirname, "ClientApp", "dist", "[name]-manifest.json"),
+                new webpack2.DllPlugin({
+                    path: path.join(__dirname, "ClientApp", "dist", "[name]-manifest.json"),
                     name: "[name]_[hash]"
                 })
             ]
@@ -94,4 +110,4 @@ var ExtractCss = new ExtractTextPlugin("vendor.css");
 
         module.exports = [clientBundleConfig, serverBundleConfig];
     })(webpack1, webpack1.optimize);
-})(Webpack);
+})(webpack);

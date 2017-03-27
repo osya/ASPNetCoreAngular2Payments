@@ -5,7 +5,7 @@ using System;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Options;
 
-namespace ASPNetCoreAngular2YoExample.SimpleTokenProvider
+namespace ASPNetCoreAngular2Payments.SimpleTokenProvider
 {
     /// <summary>
     /// Adds a token generation endpoint to an application pipeline.

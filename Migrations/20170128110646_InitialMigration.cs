@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Metadata;
 
-namespace ASPNetCoreAngular2YoExample.Migrations
+namespace ASPNetCoreAngular2Payments.Migrations
 {
     public partial class InitialMigration : Migration
     {

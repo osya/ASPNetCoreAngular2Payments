@@ -3,7 +3,7 @@ import { RouterModule } from "@angular/router";
 import { UniversalModule } from "angular2-universal";
 import { LocalStorageModule, LocalStorageService } from "angular-2-local-storage";
 //import { Store } from "./components/universal-store/universal-store";
-import { FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { FormsModule } from "@angular/forms";
 
 import { AlertComponent } from "./components/alert/alert.component";
 import { AppComponent } from "./components/app/app.component";
@@ -53,7 +53,6 @@ import { Alert } from "./services/";
             { path: "**", redirectTo: "home" }
         ]),
         FormsModule,
-        ReactiveFormsModule,
         AuthModule
     ],
     providers: [

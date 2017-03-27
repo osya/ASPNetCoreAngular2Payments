@@ -3,9 +3,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
-using ASPNetCoreAngular2YoExample.Models;
+using ASPNetCoreAngular2Payments.Models;
 
-namespace ASPNetCoreAngular2YoExample.Migrations
+namespace ASPNetCoreAngular2Payments.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
     [Migration("20170210154133_addIdentity")]
@@ -17,7 +17,7 @@ namespace ASPNetCoreAngular2YoExample.Migrations
                 .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn)
                 .HasAnnotation("ProductVersion", "1.1.0-rtm-22752");
 
-            modelBuilder.Entity("ASPNetCoreAngular2YoExample.Models.Band", b =>
+            modelBuilder.Entity("ASPNetCoreAngular2Payments.Models.Band", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();

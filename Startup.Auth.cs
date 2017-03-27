@@ -3,14 +3,14 @@ using System.Security.Claims;
 using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
-using ASPNetCoreAngular2YoExample.SimpleTokenProvider;
+using ASPNetCoreAngular2Payments.SimpleTokenProvider;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 
-namespace ASPNetCoreAngular2YoExample
+namespace ASPNetCoreAngular2Payments
 {
     public partial class Startup
     {
@@ -21,7 +21,7 @@ namespace ASPNetCoreAngular2YoExample
         private static void ConfigureAuth(IApplicationBuilder app)
         {
             var signingKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(SecretKey));
-            
+
             var tokenValidationParameters = new TokenValidationParameters
             {
                 // The signing key must match!
@@ -34,11 +34,11 @@ namespace ASPNetCoreAngular2YoExample
 
                 // Validate the JWT Audience (aud) claim
                 ValidateAudience = true,
-                ValidAudience = "http://localhost:41224/",
+                ValidAudience = "http://localhost:41225/",
 
                 // Validate the token expiry
                 ValidateLifetime = true,
-                
+
                 // If you want to allow a certain amount of clock drift, set that here:
                 ClockSkew = TimeSpan.Zero,
             };
@@ -55,7 +55,7 @@ namespace ASPNetCoreAngular2YoExample
             app.UseSimpleTokenProvider(new TokenProviderOptions
             {
                 Path = "/api/jwt",
-                Audience = "http://localhost:41224/",
+                Audience = "http://localhost:41225/",
                 Issuer = "ExampleIssuer",
                 SigningCredentials = new SigningCredentials(signingKey, SecurityAlgorithms.HmacSha256),
                 IdentityResolver = (username, password) => GetIdentity(userManager, username, password)

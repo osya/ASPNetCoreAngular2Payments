@@ -10,7 +10,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 
-namespace ASPNetCoreAngular2YoExample.SimpleTokenProvider
+namespace ASPNetCoreAngular2Payments.SimpleTokenProvider
 {
     /// <summary>
     /// Token generator middleware component which is added to an HTTP pipeline.

@@ -86,6 +86,6 @@
   },
 
   "tooling": {
-    "defaultNamespace": "ASPNetCoreAngular2YoExample"
+    "defaultNamespace": "ASPNetCoreAngular2Payments"
   }
 }

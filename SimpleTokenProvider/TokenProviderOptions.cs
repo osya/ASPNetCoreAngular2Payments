@@ -7,7 +7,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.IdentityModel.Tokens;
 
-namespace ASPNetCoreAngular2YoExample.SimpleTokenProvider
+namespace ASPNetCoreAngular2Payments.SimpleTokenProvider
 {
     /// <summary>
     /// Provides options for <see cref="TokenProviderMiddleware"/>.

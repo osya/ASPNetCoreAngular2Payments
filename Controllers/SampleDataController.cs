@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace ASPNetCoreAngular2YoExample.Controllers
+namespace ASPNetCoreAngular2Payments.Controllers
 {
     [Route("api/[controller]")]
     public class SampleDataController : Controller
