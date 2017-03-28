@@ -14,13 +14,9 @@ namespace ASPNetCoreAngular2Payments
 {
     public partial class Startup
     {
-        // The secret key every token will be signed with.
-        // Keep this safe on the server!
-        private const string SecretKey = "mysupersecret_secretkey!123";
-
-        private static void ConfigureAuth(IApplicationBuilder app)
+        private void ConfigureAuth(IApplicationBuilder app)
         {
-            var signingKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(SecretKey));
+            var signingKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(Configuration["SecretKey"]));
 
             var tokenValidationParameters = new TokenValidationParameters
             {
