@@ -20,7 +20,7 @@ import { AuthGuard } from "./auth/auth.guard";
 import { Http, RequestOptions } from "@angular/http";
 import { AuthHttp, AuthConfig } from "angular2-jwt";
 import { Auth } from "./auth/services/";
-import { Alert } from "./services/";
+import { Alert, StripeTokenHandler } from "./services/";
 
 @NgModule({
     bootstrap: [ AppComponent ],
@@ -69,6 +69,7 @@ import { Alert } from "./services/";
             deps: [Http, RequestOptions, LocalStorageService]
         },
         Alert,
+        StripeTokenHandler,
         Auth,
         AuthGuard,
         LocalStorageService

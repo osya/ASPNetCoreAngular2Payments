@@ -1,7 +1,7 @@
-﻿<form method="POST" id="stripe-default-form">
+﻿<form #stripeDefaultForm="ngForm" id="stripe-default-form">
     <h1>Default Stripe Form</h1>
 
-    <button class="stripe-button-el" (click)="openCheckout()">
+    <button class="stripe-button-el" (click)="getToken()" [disabled]="!stripeDefaultForm.form.valid">
         <span style="display: block; min-height: 30px;">Pay with Card</span>
     </button>
 </form>

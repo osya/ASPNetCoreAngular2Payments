@@ -1,18 +1,21 @@
 ﻿import { Component, ViewEncapsulation } from "@angular/core";
+import { StripeTokenHandler } from "../../services";
 
 @Component({
     selector: "sd-stripe-form",
     templateUrl: "stripe-form.component.html"
 })
 export class StripeFormComponent {
-    openCheckout() {
-        const handler = (<any>window).StripeCheckout.configure({
+    constructor(private readonly stripeTokenHandler: StripeTokenHandler) { }
+
+    getToken() {
+        // create local variable for stripeTokenHandler because in token() `this` is not a classes `this`  
+        const stripeTokenHandler = this.stripeTokenHandler;
+        const handler = (window as any).StripeCheckout.configure({
             key: "pk_test_yb1bFTfcnqHR3riVNGmeiO9G",
             locale: "auto",
             token(token: any) {
-                // You can access the token ID with `token.id`.
-                // Get the token ID to your server-side code for use.
-                console.log(token.id);
+                stripeTokenHandler.sendToken(token.id);
             },
             image: "https://stripe.com/img/documentation/checkout/marketplace.png"
         });

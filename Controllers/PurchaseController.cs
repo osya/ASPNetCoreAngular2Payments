@@ -11,9 +11,9 @@ namespace ASPNetCoreAngular2Payments.Controllers
 {
     public class PurchaseController : Controller
     {
-        // GET: /<controller>/
         [HttpPost]
-        public JsonResult Charge()
+        [AllowAnonymous]
+        public JsonResult Charge([FromBody]string tokenId)
         {
             return Json(Ok());
         }

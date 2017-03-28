@@ -1,5 +1,6 @@
 ﻿import { Component, OnInit } from "@angular/core";
 import { isBrowser, isNode } from "angular2-universal";
+import { StripeTokenHandler } from "../../services";
 
 @Component({
     selector: "sd-custom-form",
@@ -7,17 +8,16 @@ import { isBrowser, isNode } from "angular2-universal";
     styleUrls: ["./stripe-custom-form.component.css"]
 })
 export class StripeCustomFormComponent implements OnInit {
-    cardNumber: string;
-    expiryMonth: string;
-    expiryYear: string;
-    cvc: string;
-
     message: string;
+    private stripe: any;
+    private card: any;
+
+    constructor(private readonly stripeTokenHandler: StripeTokenHandler) { }
 
     ngOnInit(): void {
         if (isBrowser) {
-            const stripe = (window as any).Stripe("pk_test_yb1bFTfcnqHR3riVNGmeiO9G");
-            const elements = stripe.elements();
+            this.stripe = (window as any).Stripe("pk_test_yb1bFTfcnqHR3riVNGmeiO9G");
+            const elements = this.stripe.elements();
 
             const style = {
                 base: {
@@ -37,39 +37,33 @@ export class StripeCustomFormComponent implements OnInit {
             };
 
             // Create an instance of the card Element
-            const card = elements.create("card", { style: style });
+            this.card = elements.create("card", { style: style, hidePostalCode: true });
 
             // Add an instance of the card Element into the `card-element` <div>
-            card.mount("#card-element");
+            this.card.mount("#card-element");
 
-            card.addEventListener("change", event => {
-                const displayError = document.getElementById("card-errors");
+            this.card.addEventListener("change", event => {
                 if (event.error) {
-                    displayError.textContent = event.error.message;
+                    this.message = event.error.message;
                 } else {
-                    displayError.textContent = "";
+                    this.message = "";
                 }
             });
         }
     }
 
     getToken() {
-//        this.message = "Loading...";
+        this.message = "Loading...";
+        event.preventDefault();
 
-//        const card = elements.create("card");
-
-
-//        stripe.createToken({
-//            number: this.cardNumber,
-//            exp_month: this.expiryMonth,
-//            exp_year: this.expiryYear,
-//            cvc: this.cvc
-//        }, (status: number, response: any) => {
-//            if (status === 200) {
-//                this.message = `Success! Card token ${response.card.id}.`;
-//            } else {
-//                this.message = response.error.message;
-//            }
-//        });
+        this.stripe.createToken(this.card).then(result => {
+            if (result.error) {
+                // Inform the user if there was an error
+                this.message = result.error.message;
+            } else {
+                this.message = "";
+                this.stripeTokenHandler.sendToken(result.token.id);
+            }
+        });
     }
 }
