@@ -1,6 +1,7 @@
-﻿import { Component, OnInit } from "@angular/core";
+﻿import { Component, OnInit, Inject } from "@angular/core";
 import { isBrowser, isNode } from "angular2-universal";
 import { StripeTokenHandler } from "../../services";
+import { appConfigOpaqueToken, IAppConfig } from "../../app.config";
 
 @Component({
     selector: "sd-custom-form",
@@ -12,11 +13,11 @@ export class StripeCustomFormComponent implements OnInit {
     private stripe: any;
     private card: any;
 
-    constructor(private readonly stripeTokenHandler: StripeTokenHandler) { }
+    constructor(private readonly stripeTokenHandler: StripeTokenHandler, @Inject(appConfigOpaqueToken) private readonly config: IAppConfig) { }
 
     ngOnInit(): void {
         if (isBrowser) {
-            this.stripe = (window as any).Stripe("pk_test_yb1bFTfcnqHR3riVNGmeiO9G");
+            this.stripe = (window as any).Stripe(this.config.stripePubKey);
             const elements = this.stripe.elements();
 
             const style = {

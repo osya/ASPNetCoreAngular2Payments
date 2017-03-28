@@ -21,6 +21,7 @@ import { Http, RequestOptions } from "@angular/http";
 import { AuthHttp, AuthConfig } from "angular2-jwt";
 import { Auth } from "./auth/services/";
 import { Alert, StripeTokenHandler } from "./services/";
+import { appConfigOpaqueToken, appConfig } from "./app.config";
 
 @NgModule({
     bootstrap: [ AppComponent ],
@@ -68,6 +69,7 @@ import { Alert, StripeTokenHandler } from "./services/";
             },
             deps: [Http, RequestOptions, LocalStorageService]
         },
+        { provide: appConfigOpaqueToken, useValue: appConfig },
         Alert,
         StripeTokenHandler,
         Auth,
