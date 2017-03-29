@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Stripe;
 
 namespace ASPNetCoreAngular2Payments
 {
@@ -18,8 +19,8 @@ namespace ASPNetCoreAngular2Payments
         {
             var builder = new ConfigurationBuilder()
                 .SetBasePath(env.ContentRootPath)
-                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
+                .AddJsonFile("appsettings.json", true, true)
+                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", true)
                 .AddEnvironmentVariables();
 
             if (env.IsDevelopment())
@@ -57,6 +58,10 @@ namespace ASPNetCoreAngular2Payments
             {
                 options.HeaderName = "X-XSRF-TOKEN";
             });
+
+            var appSettings = Configuration;
+            services.AddOptions();
+            services.Configure<AppSettings>(appSettings);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -97,6 +102,8 @@ namespace ASPNetCoreAngular2Payments
             {
                  serviceScope.ServiceProvider.GetService<ApplicationDbContext>().Database.Migrate();
             }
+
+            StripeConfiguration.SetApiKey(Configuration["StripePrivateKey"]);
         }
     }
 }

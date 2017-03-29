@@ -1,6 +1,7 @@
 ﻿import { Component, ViewEncapsulation, Inject } from "@angular/core";
 import { StripeTokenHandler } from "../../services";
 import { appConfigOpaqueToken, IAppConfig } from "../../app.config";
+import { IStripeChargeModel } from "../../models/stripe.interface"
 
 @Component({
     selector: "sd-stripe-form",
@@ -9,22 +10,30 @@ import { appConfigOpaqueToken, IAppConfig } from "../../app.config";
 export class StripeFormComponent {
     constructor(private readonly stripeTokenHandler: StripeTokenHandler, @Inject(appConfigOpaqueToken) private readonly config: IAppConfig) { }
 
-    getToken() {
-        // create local variable for stripeTokenHandler because in token() `this` is not a classes `this`  
-        const stripeTokenHandler = this.stripeTokenHandler;
-        const handler = (window as any).StripeCheckout.configure({
-            key: this.config.stripePubKey,
-            locale: "auto",
-            token(token: any) {
-                stripeTokenHandler.sendToken(token.id);
-            },
-            image: "https://stripe.com/img/documentation/checkout/marketplace.png"
-        });
-
-        handler.open({
-            name: "Demo Site",
-            description: "Stripe payment for $5",
-            amount: 500
+    onSubmit() {
+        function createHandler(stripeTokenHandler: StripeTokenHandler, config: IAppConfig) {
+            return (window as any).StripeCheckout.configure({
+                key: config.stripePubKey,
+                locale: "auto",
+                token(token: any) {
+                    const model: IStripeChargeModel = {
+                        token: token.id,
+                        amount: config.chargeAmount,
+                        currency: config.chargeCurrency,
+                        description: config.chargeDescription,
+                        email: config.chargeEmail
+                    };
+                    stripeTokenHandler.charge(model).subscribe();
+                },
+                image: "https://stripe.com/img/documentation/checkout/marketplace.png"
+            });
+        }
+        createHandler(this.stripeTokenHandler, this.config).open({
+            amount: this.config.chargeAmount * 100,
+            currency: this.config.chargeCurrency,
+            description: this.config.chargeDescription,
+            email: this.config.chargeEmail,
+            name: this.config.chargeName
         });
     }
 }

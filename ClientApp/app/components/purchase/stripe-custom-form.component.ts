@@ -2,6 +2,7 @@
 import { isBrowser, isNode } from "angular2-universal";
 import { StripeTokenHandler } from "../../services";
 import { appConfigOpaqueToken, IAppConfig } from "../../app.config";
+import { IStripeChargeModel } from "../../models/stripe.interface";
 
 @Component({
     selector: "sd-custom-form",
@@ -53,7 +54,7 @@ export class StripeCustomFormComponent implements OnInit {
         }
     }
 
-    getToken() {
+    onSubmit() {
         this.message = "Loading...";
         event.preventDefault();
 
@@ -62,8 +63,16 @@ export class StripeCustomFormComponent implements OnInit {
                 // Inform the user if there was an error
                 this.message = result.error.message;
             } else {
-                this.message = "";
-                this.stripeTokenHandler.sendToken(result.token.id);
+                this.message = `Success! Card token ${result.token.id}`;
+                const model: IStripeChargeModel = {
+                    token: result.token.id,
+                    amount: this.config.chargeAmount,
+                    currency: this.config.chargeCurrency,
+                    description: this.config.chargeDescription,
+                    email: this.config.chargeEmail
+                };
+                this.stripeTokenHandler.charge(model)
+                    .subscribe((data) => { this.message = `ChargeId=${data.value}`; });
             }
         });
     }
