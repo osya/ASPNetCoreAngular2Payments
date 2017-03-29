@@ -13,7 +13,8 @@ namespace ASPNetCoreAngular2Payments.Controllers
     {
         [HttpPost]
         [AllowAnonymous]
-        public JsonResult Charge([FromBody]string tokenId)
+        [ValidateAntiForgeryToken]
+        public async Task<JsonResult> Charge([FromBody]string tokenId)
         {
             return Json(Ok());
         }

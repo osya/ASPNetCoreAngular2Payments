@@ -58,6 +58,8 @@ namespace ASPNetCoreAngular2Payments.SimpleTokenProvider
                 return context.Response.WriteAsync("Bad request.");
             }
 
+            // TODO: Insert Antiforgery token validation in header
+
             _logger.LogInformation("Handling request: " + context.Request.Path);
 
             return GenerateToken(context);
