@@ -4,11 +4,12 @@ import { IStripeChargeModel } from "../models/stripe.interface"
 
 @Injectable()
 export class StripeTokenHandler {
+    private options = new RequestOptions({ headers: new Headers({ 'Content-Type': "application/json" }) });
+
     constructor(private readonly http: Http) { }
 
     charge(model: IStripeChargeModel) {
         // Charge on your server
-        const options = new RequestOptions({ headers: new Headers({ 'Content-Type': "application/json" }) });
-        return this.http.post("/Purchase/Charge", JSON.stringify(model), options).map(res => res.json());
+        return this.http.post("/Purchase/StripeCharge", JSON.stringify(model), this.options).map(res => res.json());
     }
 }

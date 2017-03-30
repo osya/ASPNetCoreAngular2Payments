@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ASPNetCoreAngular2Payments.Models;
+using Braintree;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -25,7 +26,7 @@ namespace ASPNetCoreAngular2Payments.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<JsonResult> Charge([FromBody]StripeChargeModel model)
+        public async Task<JsonResult> StripeCharge([FromBody]StripeChargeModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -57,6 +58,56 @@ namespace ASPNetCoreAngular2Payments.Controllers
 
                 return stripeCharge.Id;
             });
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<JsonResult> BraintreeCharge([FromBody] string paymentMethodNonce)
+        {
+            var gateway = new BraintreeGateway
+            {
+                Environment = Braintree.Environment.SANDBOX,
+                MerchantId = _appSettings.BraintreeMerchantId,
+                PublicKey = _appSettings.BraintreePublicKey,
+                PrivateKey = _appSettings.BraintreePrivateKey
+            };
+
+            var request = new TransactionRequest
+            {
+                Amount = 5.00M,
+                PaymentMethodNonce = paymentMethodNonce,
+                Options = new TransactionOptionsRequest
+                {
+                    SubmitForSettlement = true
+                }
+            };
+
+            var result = gateway.Transaction.Sale(request);
+            if (result.IsSuccess())
+            {
+                var transaction = result.Target;
+                return Json(Ok($"Success!: {transaction.Id}"));
+            }
+            if (result.Transaction != null)
+            {
+                var transaction = result.Transaction;
+                Console.WriteLine("Error processing transaction:");
+                Console.WriteLine("  Status: " + transaction.Status);
+                Console.WriteLine("  Code: " + transaction.ProcessorResponseCode);
+                Console.WriteLine("  Text: " + transaction.ProcessorResponseText);
+            }
+            else
+            {
+                foreach (var error in result.Errors.DeepAll())
+                {
+                    Console.WriteLine("Attribute: " + error.Attribute);
+                    Console.WriteLine("  Code: " + error.Code);
+                    Console.WriteLine("  Message: " + error.Message);
+                }
+            }
+
+            return Json(BadRequest());
         }
     }
 }

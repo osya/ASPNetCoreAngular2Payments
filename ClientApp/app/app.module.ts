@@ -12,8 +12,7 @@ import { HomeComponent } from "./components/home/home.component";
 import { FetchDataComponent } from "./components/fetchdata/fetchdata.component";
 import { CounterComponent } from "./components/counter/counter.component";
 import { SearchboxComponent } from "./components/searchbox/searchbox.component";
-import { StripeFormComponent } from "./components/purchase/stripe-form.component";
-import { StripeCustomFormComponent } from "./components/purchase/stripe-custom-form.component";
+import { StripeFormComponent, StripeCustomFormComponent, BraintreeComponent } from "./components/purchase/";
 
 import { AuthModule } from "./auth/auth.module";
 import { AuthGuard } from "./auth/auth.guard";
@@ -34,7 +33,8 @@ import { appConfigOpaqueToken, appConfig } from "./app.config";
         HomeComponent,
         SearchboxComponent,
         StripeFormComponent,
-        StripeCustomFormComponent
+        StripeCustomFormComponent,
+        BraintreeComponent
 //        Store
     ],
     imports: [
@@ -51,6 +51,7 @@ import { appConfigOpaqueToken, appConfig } from "./app.config";
             { path: "search", component: SearchboxComponent },
             { path: "stripe-default-purchase", component: StripeFormComponent },
             { path: "stripe-custom-purchase", component: StripeCustomFormComponent },
+            { path: "braintree", component: BraintreeComponent },
             { path: "**", redirectTo: "home" }
         ]),
         FormsModule,

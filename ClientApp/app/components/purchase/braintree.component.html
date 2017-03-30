@@ -1,0 +1,10 @@
+﻿<form #braintreeForm="ngForm" id="braintree-form" (ngSubmit)="onSubmit()">
+    <h1>Braintree Form</h1>
+    <div class="form-row">
+        <div id="payment-form"></div>
+        <div id="card-errors">{{message}}</div>
+    </div>
+    <button [disabled]="!braintreeForm.form.valid">
+        <span style="display: block; min-height: 30px;">Submit Payment</span>
+    </button>
+</form>

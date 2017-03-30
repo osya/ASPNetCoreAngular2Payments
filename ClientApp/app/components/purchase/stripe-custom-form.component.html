@@ -13,5 +13,7 @@
         <div id="card-errors">{{message}}</div>
     </div>
 
-    <button [disabled]="!stripeCustomForm.form.valid">Submit Payment</button>
+    <button [disabled]="!stripeCustomForm.form.valid">
+        <span style="display: block; min-height: 30px;">Submit Payment</span>
+    </button>
 </form>
