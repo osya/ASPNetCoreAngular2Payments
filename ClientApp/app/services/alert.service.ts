@@ -32,7 +32,7 @@ export class Alert {
     error(error: string | Response, keepAfterNavigationChange = false)
     {
         this.keepAfterNavigationChange = keepAfterNavigationChange;
-        if (typeof (error) === "object") {
+        if (error instanceof Response) {
             const errList: string[] = [];
             const pDict = error.json();
             for (let key in pDict) {

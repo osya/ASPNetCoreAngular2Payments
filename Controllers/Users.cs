@@ -51,7 +51,7 @@ namespace ASPNetCoreAngular2Payments.Controllers
         // POST api/values
         [HttpPost]
         [AllowAnonymous]
-        [ValidateAntiForgeryToken]
+		[ValidateAntiForgeryToken]
         public async Task<ActionResult> Post([FromBody]UserViewModel model)
         {
             if (ModelState.IsValid)

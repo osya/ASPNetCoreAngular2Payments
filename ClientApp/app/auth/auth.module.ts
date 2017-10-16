@@ -3,7 +3,6 @@ import { CommonModule } from "@angular/common";
 import { FormsModule } from "@angular/forms";
 import { RouterModule } from "@angular/router";
 import { CustomFormsModule } from "ng2-validation";
-import { AuthGuard } from "./auth.guard";
 import { LoginComponent } from "./login/login.component";
 import { RegisterComponent } from "./register/register.component";
 
@@ -15,11 +14,11 @@ import { RegisterComponent } from "./register/register.component";
     imports: [
         CommonModule,
         FormsModule,
+        CustomFormsModule,
         RouterModule.forChild([
             { path: "login", component: LoginComponent },
             { path: "register", component: RegisterComponent }
-        ]),
-        CustomFormsModule
+        ])
     ]
 })
 export class AuthModule { }

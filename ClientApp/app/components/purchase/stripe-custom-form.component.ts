@@ -1,7 +1,8 @@
-﻿import { Component, OnInit, Inject } from "@angular/core";
-import { isBrowser, isNode } from "angular2-universal";
+﻿import { isPlatformBrowser } from "@angular/common";
+import { Component, OnInit, Inject, PLATFORM_ID } from "@angular/core";
 import { StripeTokenHandler } from "../../services";
-import { appConfigOpaqueToken, IAppConfig } from "../../app.config";
+import { appConfigOpaqueToken } from "../../app.config";
+import { IAppConfig } from "../../iapp.config";
 import { IStripeChargeModel } from "../../models/stripe.interface";
 
 @Component({
@@ -14,10 +15,14 @@ export class StripeCustomFormComponent implements OnInit {
     private stripe: any;
     private card: any;
 
-    constructor(private readonly stripeTokenHandler: StripeTokenHandler, @Inject(appConfigOpaqueToken) private readonly config: IAppConfig) { }
+    constructor(
+        private readonly stripeTokenHandler: StripeTokenHandler,
+        @Inject(appConfigOpaqueToken) private readonly config: IAppConfig,
+        @Inject(PLATFORM_ID) private readonly platformId: string
+    ) {}
 
     ngOnInit(): void {
-        if (isBrowser) {
+        if (isPlatformBrowser(this.platformId)) {
             this.stripe = (window as any).Stripe(this.config.stripePubKey);
             const elements = this.stripe.elements();
 
@@ -44,7 +49,7 @@ export class StripeCustomFormComponent implements OnInit {
             // Add an instance of the card Element into the `card-element` <div>
             this.card.mount("#card-element");
 
-            this.card.addEventListener("change", event => {
+            this.card.addEventListener("change", (event: any) => {
                 if (event.error) {
                     this.message = event.error.message;
                 } else {
@@ -54,11 +59,11 @@ export class StripeCustomFormComponent implements OnInit {
         }
     }
 
-    onSubmit() {
+    onSubmit(event: any) {
         this.message = "Loading...";
         event.preventDefault();
 
-        this.stripe.createToken(this.card).then(result => {
+        this.stripe.createToken(this.card).then((result: any) => {
             if (result.error) {
                 // Inform the user if there was an error
                 this.message = result.error.message;

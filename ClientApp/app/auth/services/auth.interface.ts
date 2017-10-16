@@ -1,9 +1,10 @@
 ﻿import { IUser } from "../../models/user.interface";
 
 export interface IAuthService {
-    signUp(user: IUser);
-    login(user: IUser);
-    logout();
-    isLoggedIn();
-    isLoggedInWithFacebook();
+//    TODO: Уточнить возвращаемые типы
+    signUp(user: IUser): any;
+    login(user: IUser): any;
+    logout(): any;
+    isLoggedIn(): any;
+    isLoggedInWithFacebook(): any;
 }

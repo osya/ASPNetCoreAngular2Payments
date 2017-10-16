@@ -1,4 +1,4 @@
-﻿<form #braintreeForm="ngForm" id="braintree-form" (ngSubmit)="onSubmit()">
+﻿<form #braintreeForm="ngForm" id="braintree-form" (ngSubmit)="onSubmit($event)">
     <h1>Braintree Form</h1>
     <div class="form-row">
         <div id="payment-form"></div>

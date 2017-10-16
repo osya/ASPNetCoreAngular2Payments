@@ -83,7 +83,7 @@ namespace ASPNetCoreAngular2Payments.Controllers
                 }
             };
 
-            var result = gateway.Transaction.Sale(request);
+            var result = await gateway.Transaction.SaleAsync(request);
             if (result.IsSuccess())
             {
                 var transaction = result.Target;

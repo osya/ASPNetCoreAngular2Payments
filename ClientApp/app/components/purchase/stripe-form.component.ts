@@ -1,6 +1,7 @@
-﻿import { Component, ViewEncapsulation, Inject } from "@angular/core";
+﻿import { Component, Inject } from "@angular/core";
 import { StripeTokenHandler } from "../../services";
-import { appConfigOpaqueToken, IAppConfig } from "../../app.config";
+import { appConfigOpaqueToken } from "../../app.config";
+import { IAppConfig } from "../../iapp.config";
 import { IStripeChargeModel } from "../../models/stripe.interface"
 
 @Component({

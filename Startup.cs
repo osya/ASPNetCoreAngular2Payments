@@ -1,57 +1,69 @@
+using System;
+using System.Text;
 using ASPNetCoreAngular2Payments.Models;
-using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.AspNetCore.Mvc.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.SpaServices.Webpack;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
 using Stripe;
 
 namespace ASPNetCoreAngular2Payments
 {
     public partial class Startup
     {
-        public Startup(IHostingEnvironment env)
+        public Startup(IConfiguration configuration)
         {
-            var builder = new ConfigurationBuilder()
-                .SetBasePath(env.ContentRootPath)
-                .AddJsonFile("appsettings.json", true, true)
-                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", true)
-                .AddEnvironmentVariables();
-
-            if (env.IsDevelopment())
-            {
-                builder.AddUserSecrets();
-            }
-
-            Configuration = builder.Build();
+            Configuration = configuration;
         }
 
-        private IConfigurationRoot Configuration { get; }
+        private IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+			services.AddIdentity<IdentityUser, IdentityRole>()
+                .AddEntityFrameworkStores<AppDbContext>()
+                .AddDefaultTokenProviders();
+
             // Add framework services
             // Make authentication compulsory across the board (i.e. shutdown EVERYTHING unless explicitly opened up).
-            services.AddMvc(config =>
+            services.AddAuthentication(options =>
             {
-                var policy = new AuthorizationPolicyBuilder()
-                                 .RequireAuthenticatedUser()
-                                 .Build();
-                config.Filters.Add(new AuthorizeFilter(policy));
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(cfg =>
+            {
+                cfg.TokenValidationParameters = new TokenValidationParameters()
+                {
+                    // The signing key must match!
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["SecretKey"])),
+
+                    // Validate the JWT Issuer (iss) claim
+                    ValidateIssuer = true,
+                    ValidIssuer = Configuration["AppConfiguration:SiteUrl"],
+
+                    // Validate the JWT Audience (aud) claim
+                    ValidAudience = Configuration["AppConfiguration:SiteUrl"],
+
+                    // Validate the token expiry
+                    ValidateLifetime = true,
+
+                    // If you want to allow a certain amount of clock drift, set that here:
+                    ClockSkew = TimeSpan.Zero,
+                };
             });
 
-            services.AddDbContext<ApplicationDbContext>(
-                opts => opts.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
+			services.AddMvc();
 
-            services.AddIdentity<IdentityUser, IdentityRole>()
-                .AddEntityFrameworkStores<ApplicationDbContext>()
-                .AddDefaultTokenProviders();
+            services.AddDbContext<AppDbContext>(
+                opts => opts.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddScoped<AngularAntiForgeryTokenAttribute>();
             services.AddAntiforgery(options =>
@@ -59,9 +71,8 @@ namespace ASPNetCoreAngular2Payments
                 options.HeaderName = "X-XSRF-TOKEN";
             });
 
-            var appSettings = Configuration;
             services.AddOptions();
-            services.Configure<AppSettings>(appSettings);
+            services.Configure<AppSettings>(Configuration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -82,7 +93,7 @@ namespace ASPNetCoreAngular2Payments
                 app.UseExceptionHandler("/Home/Error");
             }
 
-            app.UseIdentity();
+            app.UseAuthentication();
             ConfigureAuth(app);
 
             app.UseStaticFiles();
@@ -100,7 +111,7 @@ namespace ASPNetCoreAngular2Payments
             // Create database on startup
             using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
             {
-                 serviceScope.ServiceProvider.GetService<ApplicationDbContext>().Database.Migrate();
+                 serviceScope.ServiceProvider.GetService<AppDbContext>().Database.Migrate();
             }
 
             StripeConfiguration.SetApiKey(Configuration["StripePrivateKey"]);

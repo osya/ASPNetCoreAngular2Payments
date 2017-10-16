@@ -6,7 +6,6 @@ import { Alert } from "../../services/";
     selector: "alert",
     templateUrl: "alert.component.html"
 })
-
 export class AlertComponent {
     message: any;
 

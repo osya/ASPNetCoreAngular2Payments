@@ -1,6 +1,6 @@
-﻿import { Component, OnInit } from "@angular/core";
+﻿import { isPlatformBrowser } from "@angular/common";
+import { Inject, PLATFORM_ID, Component, OnInit } from "@angular/core";
 import { Router, ActivatedRoute } from "@angular/router";
-import { isBrowser, isNode } from "angular2-universal";
 
 import { IUser } from "../../models/user.interface";
 import { Auth } from ".."
@@ -8,7 +8,7 @@ import { Alert } from "../../services";
 
 @Component({
     selector: "login",
-    template: require("./login.component.html")
+    templateUrl: "login.component.html"
 })
 export class LoginComponent implements OnInit {
     user: IUser;
@@ -20,7 +20,8 @@ export class LoginComponent implements OnInit {
         private readonly router: Router,
         private readonly auth: Auth,
         private readonly alert: Alert,
-    ) { }
+        @Inject(PLATFORM_ID) private readonly platformId: string
+    ) {}
 
     ngOnInit() {
         this.user = {
@@ -28,10 +29,9 @@ export class LoginComponent implements OnInit {
             password: "",
             confirmPassword: ""
         }
-        if (isBrowser) {
+        if (isPlatformBrowser(this.platformId)) {
             this.auth.logout();
         }
-
         // get return url from route parameters or default to '/'
         this.returnUrl = this.route.snapshot.queryParams["returnUrl"] || "/";
     }

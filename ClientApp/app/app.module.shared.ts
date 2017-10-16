@@ -1,82 +1,82 @@
 import { NgModule } from "@angular/core";
-import { RouterModule } from "@angular/router";
-import { UniversalModule } from "angular2-universal";
-import { LocalStorageModule, LocalStorageService } from "angular-2-local-storage";
-//import { Store } from "./components/universal-store/universal-store";
+import { CommonModule } from "@angular/common";
 import { FormsModule } from "@angular/forms";
+import { HttpModule } from "@angular/http";
+import { RouterModule } from "@angular/router";
+import { LocalStorageModule, LocalStorageService } from "angular-2-local-storage";
+import { AuthModule } from "./auth/auth.module";
 
-import { AlertComponent } from "./components/alert/alert.component";
 import { AppComponent } from "./components/app/app.component";
 import { NavMenuComponent } from "./components/navmenu/navmenu.component";
-import { HomeComponent } from "./components/home/home.component";
 import { FetchDataComponent } from "./components/fetchdata/fetchdata.component";
 import { CounterComponent } from "./components/counter/counter.component";
+import { AlertComponent } from "./components/alert/alert.component";
 import { SearchboxComponent } from "./components/searchbox/searchbox.component";
+import { HomeComponent } from "./components/home/home.component";
 import { StripeFormComponent, StripeCustomFormComponent, BraintreeComponent } from "./components/purchase/";
-
-import { AuthModule } from "./auth/auth.module";
-import { AuthGuard } from "./auth/auth.guard";
-import { Http, RequestOptions } from "@angular/http";
-import { AuthHttp, AuthConfig } from "angular2-jwt";
-import { Auth } from "./auth/services/";
-import { Alert, StripeTokenHandler } from "./services/";
 import { appConfigOpaqueToken, appConfig } from "./app.config";
 
+import { AuthHttp, AuthConfig } from "angular2-jwt";
+import { Http, RequestOptions } from "@angular/http";
+import { Auth } from "./auth/services/";
+import { Alert, StripeTokenHandler } from "./services/";
+import { AuthGuard } from "./auth/auth.guard";
+
+export function authHttpFactory(http: Http, options: RequestOptions, localStorageService: LocalStorageService) {
+    return new AuthHttp(new AuthConfig({
+        tokenName: "id_token",
+        tokenGetter: (() => localStorageService.get<string>("id_token")),
+        globalHeaders: [{ 'Content-Type': "application/json" }],
+        noJwtError: true
+    }), http, options);
+}
+
 @NgModule({
-    bootstrap: [ AppComponent ],
     declarations: [
         AlertComponent,
         AppComponent,
         NavMenuComponent,
         CounterComponent,
         FetchDataComponent,
-        HomeComponent,
         SearchboxComponent,
+        HomeComponent,
         StripeFormComponent,
         StripeCustomFormComponent,
         BraintreeComponent
-//        Store
     ],
     imports: [
-        UniversalModule, // must be first import. This automatically imports BrowserModule, HttpModule, and JsonpModule too.
-        LocalStorageModule.withConfig({
-            prefix: "app",
-            storageType: "localStorage"
-        }),
+        AuthModule,
+        CommonModule,
+        HttpModule,
+        FormsModule,
         RouterModule.forRoot([
-            { path: "", redirectTo: "home", pathMatch: "full" },
-            { path: "home", component: HomeComponent, canActivate: [AuthGuard] },
+            { path: "", component: HomeComponent, pathMatch: "full", canActivate: [AuthGuard] },
             { path: "counter", component: CounterComponent },
             { path: "fetch-data", component: FetchDataComponent },
             { path: "search", component: SearchboxComponent },
             { path: "stripe-default-purchase", component: StripeFormComponent },
             { path: "stripe-custom-purchase", component: StripeCustomFormComponent },
             { path: "braintree", component: BraintreeComponent },
-            { path: "**", redirectTo: "home" }
+            { path: "**", redirectTo: "" }
         ]),
-        FormsModule,
-        AuthModule
+        LocalStorageModule.withConfig({
+            prefix: "app",
+            storageType: "localStorage"
+        })
     ],
     providers: [
         {
             provide: AuthHttp,
-            useFactory: (http: Http, options: RequestOptions, localStorageService: LocalStorageService) => {
-                return new AuthHttp(new AuthConfig({
-                    tokenName: "id_token",
-                    tokenGetter: (() => localStorageService.get<string>("id_token")),
-                    globalHeaders: [{ 'Content-Type': "application/json" }],
-                    noJwtError: true
-                }), http, options);
-            },
+            useFactory: authHttpFactory,
             deps: [Http, RequestOptions, LocalStorageService]
         },
-        { provide: appConfigOpaqueToken, useValue: appConfig },
         Alert,
-        StripeTokenHandler,
         Auth,
         AuthGuard,
-        LocalStorageService
+        LocalStorageService,
+        StripeTokenHandler,
+        { provide: appConfigOpaqueToken, useValue: appConfig }
     ]
 })
-export class AppModule {
+export class AppModuleShared {
 }

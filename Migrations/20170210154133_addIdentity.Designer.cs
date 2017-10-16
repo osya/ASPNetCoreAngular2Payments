@@ -7,7 +7,7 @@ using ASPNetCoreAngular2Payments.Models;
 
 namespace ASPNetCoreAngular2Payments.Migrations
 {
-    [DbContext(typeof(ApplicationDbContext))]
+    [DbContext(typeof(AppDbContext))]
     [Migration("20170210154133_addIdentity")]
     partial class addIdentity
     {

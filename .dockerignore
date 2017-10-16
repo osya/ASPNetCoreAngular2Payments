@@ -1,2 +1,5 @@
 docker-compose.yml
 Dockerfile
+bin/
+obj/
+node_modules/

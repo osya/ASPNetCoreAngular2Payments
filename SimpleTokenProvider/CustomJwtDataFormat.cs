@@ -2,7 +2,6 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Http.Authentication;
 using Microsoft.IdentityModel.Tokens;
 
 namespace ASPNetCoreAngular2Payments.SimpleTokenProvider
@@ -28,9 +27,8 @@ namespace ASPNetCoreAngular2Payments.SimpleTokenProvider
 
             try
             {
-                SecurityToken validToken;
-                principal = handler.ValidateToken(protectedText, _validationParameters, out validToken);
-
+                principal = handler.ValidateToken(protectedText, _validationParameters, out var validToken);
+                
                 var validJwt = validToken as JwtSecurityToken;
 
                 if (validJwt == null)

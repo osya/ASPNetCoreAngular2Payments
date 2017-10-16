@@ -7,7 +7,7 @@ import { Alert } from "../../services/";
 
 @Component({
     selector: "register",
-    template: require("./register.component.html")
+    templateUrl: "./register.component.html"
 })
 export class RegisterComponent implements OnInit {
     user: IUser;

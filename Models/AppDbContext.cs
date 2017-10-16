@@ -7,9 +7,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ASPNetCoreAngular2Payments.Models
 {
-    public class ApplicationDbContext : IdentityDbContext
+    public class AppDbContext : IdentityDbContext
     {
-        public ApplicationDbContext(DbContextOptions options)
+        public AppDbContext(DbContextOptions options)
             : base(options)
         { }
 

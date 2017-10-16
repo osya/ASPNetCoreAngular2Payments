@@ -1,7 +1,8 @@
-﻿import { Component, OnInit, Inject } from "@angular/core";
-import { isBrowser, isNode } from "angular2-universal";
-import { Http, Headers, Response, RequestOptions } from "@angular/http";
-import { appConfigOpaqueToken, IAppConfig } from "../../app.config";
+﻿import { isPlatformBrowser } from "@angular/common";
+import { Component, OnInit, Inject, PLATFORM_ID } from "@angular/core";
+import { Http, Headers, RequestOptions } from "@angular/http";
+import { appConfigOpaqueToken } from "../../app.config";
+import { IAppConfig } from "../../iapp.config";
 //var client = require("braintree-web/client");
 //var hostedFields = require("braintree-web/hosted-fields");
 
@@ -13,10 +14,14 @@ export class BraintreeComponent implements OnInit {
     message: string;
     private options = new RequestOptions({ headers: new Headers({ 'Content-Type': "application/json" }) });
 
-    constructor(private readonly http: Http, @Inject(appConfigOpaqueToken) private readonly config: IAppConfig) { }
+    constructor(
+        private readonly http: Http,
+        @Inject(appConfigOpaqueToken) private readonly config: IAppConfig,
+        @Inject(PLATFORM_ID) private readonly platformId: string
+    ) {}
 
     ngOnInit(): void {
-        if (isBrowser) {
+        if (isPlatformBrowser(this.platformId)) {
             (window as any).braintree.setup(this.config.braintreeToken,
                 "dropin",
                 {
@@ -31,7 +36,7 @@ export class BraintreeComponent implements OnInit {
 //        });
     }
 
-    onSubmit() {
+    onSubmit(event: any) {
         this.message = "Loading...";
         event.preventDefault();
 

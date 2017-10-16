@@ -1,5 +1,5 @@
 ﻿import { Injectable } from "@angular/core";
-import { Http, Headers, Response, RequestOptions } from "@angular/http";
+import { Http, Headers, RequestOptions } from "@angular/http";
 import { IStripeChargeModel } from "../models/stripe.interface"
 
 @Injectable()

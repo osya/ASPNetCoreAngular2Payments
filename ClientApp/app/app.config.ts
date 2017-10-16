@@ -1,17 +1,8 @@
 ﻿import { OpaqueToken } from "@angular/core";
+import { IAppConfig } from "./iapp.config";
 
 export let appConfigOpaqueToken = new OpaqueToken("app.config");
 
-export interface IAppConfig {
-    stripePubKey: string;
-    chargeAmount: number;
-    chargeCurrency: string;
-    chargeDescription: string;
-    chargeEmail: string;
-    chargeName: string;
-    braintreeToken: string;
-    braintreeNonce: string;
-}
 
 export const appConfig: IAppConfig = {
     stripePubKey: "pk_test_yb1bFTfcnqHR3riVNGmeiO9G",

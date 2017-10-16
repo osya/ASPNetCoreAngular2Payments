@@ -1,7 +1,5 @@
-﻿module.exports = {
-    plugins: [
-        require("autoprefixer")({
-            browsers: ["> 1%", "last 2 versions"]
-        })
-    ]
-};
+﻿module.exports = ({ options, env }) => ({
+    plugins: {
+        'autoprefixer': env === "production" ? options.autoprefixer : false
+    }
+});
