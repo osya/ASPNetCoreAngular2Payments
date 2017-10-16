@@ -11,7 +11,7 @@ RUN apt-get install -y postgresql-client
 
 RUN npm install
 RUN node node_modules/webpack/bin/webpack.js --config webpack.config.vendor.js --env.prod
-RUN node node_modules/webpack/bin/webpack.js --env.prod --progress --display-error-details
+RUN node node_modules/webpack/bin/webpack.js --env.prod
 
 RUN ["dotnet", "restore"]
 RUN ["dotnet", "build"]

@@ -1,4 +1,7 @@
-﻿# Installation
+﻿ASP.NET Core MVC 2.0 & Angular 4 project for testing payments via Stripe & Braintree
+
+[![Build Status](https://travis-ci.org/osya/ASPNetCoreAngular2Payments.svg?branch=master)](https://travis-ci.org/osya/ASPNetCoreAngular2Payments)
+# Installation
 
 Before creating Docker container:
  - npm install
