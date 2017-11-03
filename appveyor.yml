@@ -3,5 +3,5 @@ image: Visual Studio 2017
 install:
 - dotnet restore
 build:
-  project: ASPNetCoreAngular2YoExample.sln
+  project: ASPNetCoreAngular2Payments.sln
   verbosity: minimal
