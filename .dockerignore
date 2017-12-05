@@ -1,5 +1,3 @@
-docker-compose.yml
-Dockerfile
-bin/
-obj/
-node_modules/
+*
+!obj/Docker/publish/*
+!obj/Docker/empty/

@@ -1,7 +1,8 @@
 version: 1.0.{build}
 image: Visual Studio 2017
-install:
-- dotnet restore
-build:
-  project: ASPNetCoreAngular2Payments.sln
-  verbosity: minimal
+environment:
+  COVERALLS_REPO_TOKEN:
+    secure: 9e9xt6inAO6xbKbr9RCICwC75UKKsnCj/bweHOg7YNWguw2qEC+mtn3MJ4IKN7qV
+build_script:
+    - ps: dotnet restore ./ASPNetCoreAngular2Payments.csproj
+    - ps: dotnet build ./ASPNetCoreAngular2Payments.csproj

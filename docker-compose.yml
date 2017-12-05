@@ -1,19 +1,20 @@
-version: '2'
+version: '3'
 
 services:
-  web:
-    build: .
-    image: aspnetcore-angular
-    ports:
-      - "80:41224"
+  aspnetcoreangular2payments:
+    image: aspnetcoreangular2payments
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ${APPDATA}/microsoft/UserSecrets/:/root/.microsoft/usersecrets
+      # To avoid the System.InvalidOperationException: The antiforgery token could not be decrypted
+      - ${LOCALAPPDATA}\ASP.NET\DataProtection-Keys:/root/.aspnet/DataProtection-Keys
     depends_on:
-      - "db"
-    command: ["bash", "./wait-for-postgres.sh", "db", "5432", "--", "dotnet", "run", "--launch-profile", "Docker"]
+      - db
     environment:
       - PGUSER=docker
       - PGPASSWORD=docker
-    volumes:
-      - ${APPDATA}/microsoft/UserSecrets/:/root/.microsoft/usersecrets
 
   db:
     image: postgres
@@ -21,5 +22,10 @@ services:
     environment:
       - POSTGRES_USER=docker
       - POSTGRES_PASSWORD=docker
-    ports: 
+    ports:
       - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready"]
+      interval: 30s
+      timeout: 30s
+      retries: 3

@@ -10,6 +10,7 @@ namespace ASPNetCoreAngular2Payments.Controllers
 		[ServiceFilter(typeof(AngularAntiForgeryTokenAttribute), IsReusable = true)]    // Send new antiforgery token
         public IActionResult Index()
         {
+            ViewData["Message"] = System.Runtime.InteropServices.RuntimeInformation.OSDescription;
             return View();
         }
 

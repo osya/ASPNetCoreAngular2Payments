@@ -1,5 +1,3 @@
-using System;
-using System.Text;
 using ASPNetCoreAngular2Payments.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -12,6 +10,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Stripe;
+using System;
+using System.Text;
 
 namespace ASPNetCoreAngular2Payments
 {
@@ -62,8 +62,8 @@ namespace ASPNetCoreAngular2Payments
 
 			services.AddMvc();
 
-            services.AddDbContext<AppDbContext>(
-                opts => opts.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
+            var connectionString = Configuration.GetConnectionString("DefaultConnection");
+            services.AddDbContext<AppDbContext>(opts => opts.UseNpgsql(connectionString));
 
             services.AddScoped<AngularAntiForgeryTokenAttribute>();
             services.AddAntiforgery(options =>

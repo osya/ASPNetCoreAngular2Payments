@@ -1,0 +1,8 @@
+version: '3'
+
+services:
+  aspnetcoreangular2payments:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    ports:
+      - "80"

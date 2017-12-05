@@ -1,0 +1,9 @@
+version: '3'
+
+services:
+  ci-build:
+    image: microsoft/aspnetcore-build:2.0
+    volumes:
+      - .:/src
+    working_dir: /src
+    command: /bin/bash -c "dotnet restore ./ASPNetCoreAngular2Payments.sln && dotnet publish ./ASPNetCoreAngular2Payments.sln -c Release -o ./obj/Docker/publish"
