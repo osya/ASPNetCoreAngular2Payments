@@ -10,7 +10,7 @@ Used technologies:
 - Stripe & Braintree
 - Testing: Karma
 - Assets management: NPM & Webpack
-- Travis CI
+- Travis CI, AppVeyor
 
 ## Installation
 
