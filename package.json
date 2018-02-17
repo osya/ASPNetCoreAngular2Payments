@@ -7,7 +7,8 @@
     "last 2 versions"
   ],
   "scripts": {
-    "test": "karma start --single-run --browsers PhantomJS ClientApp/test/karma.conf.js"
+    "test": "karma start --single-run --browsers PhantomJS ClientApp/test/karma.conf.js",
+    "webpack:deploy": "webpack --config webpack.config.vendor.js --env.prod && webpack --env.prod"
   },
   "dependencies": {
     "@angular/animations": "4.2.5",
