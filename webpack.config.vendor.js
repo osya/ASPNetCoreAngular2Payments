@@ -1,5 +1,6 @@
 // jshint esversion: 6
 (function () {
+    "use strict";
     const webpack = require("webpack");
 
     (function (webpack1) {
