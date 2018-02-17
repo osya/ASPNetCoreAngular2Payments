@@ -33,3 +33,9 @@ docker-compose up
 Open the following URL in a browser <http://192.168.99.100/>
 
 ## Tests
+
+To run all tests, run
+
+```shell
+npm test
+```
