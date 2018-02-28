@@ -12,14 +12,11 @@
                 const CheckerPlugin = require("awesome-typescript-loader").CheckerPlugin;
 
                 // Configuration in common to both client-side and server-side bundles
-                const isDevBuild = !(env && env.prod);
+                const isDevMode = !(env && env.prod);
                 const sharedConfig = {
-                    stats: {
-                        modules: false
-                    },
                     context: __dirname,
                     resolve: {
-                        extensions: [".js", ".ts"]
+                        extensions: [".ts", ".js"]
                     },
                     output: {
                         filename: "[name].js",
@@ -29,7 +26,7 @@
                         rules: [{
                                 test: /\.ts$/,
                                 include: /ClientApp/,
-                                use: isDevBuild ? ["awesome-typescript-loader?silent=true", "angular2-template-loader"] : "@ngtools/webpack"
+                                use: isDevMode ? ["awesome-typescript-loader?silent=true", "angular2-template-loader"] : "@ngtools/webpack"
                             },
                             {
                                 test: /\.html$/,
@@ -37,7 +34,7 @@
                             },
                             {
                                 test: /\.css$/,
-                                use: ["to-string-loader", isDevBuild ? "css-loader" : "css-loader?minimize", "postcss-loader"]
+                                use: ["to-string-loader", isDevMode ? "css-loader" : "css-loader?minimize", "postcss-loader"]
                             },
                             {
                                 test: /\.(png|jpg|jpeg|gif|svg)$/,
@@ -62,7 +59,7 @@
                             context: __dirname,
                             manifest: require("./wwwroot/dist/vendor-manifest.json")
                         })
-                    ].concat(isDevBuild ? [
+                    ].concat(isDevMode ? [
                         // Plugins that apply in development builds onlyc
                         new webpack2.SourceMapDevToolPlugin({
                             filename: "[file].map", // Remove this line if you prefer inline source maps
@@ -94,8 +91,9 @@
                             sourceType: "commonjs2",
                             name: "./vendor"
                         })
-                    ].concat(isDevBuild ? [] : [
+                    ].concat(isDevMode ? [] : [
                         // Plugins that apply in production builds only
+                        new optimize.UglifyJsPlugin(),
                         new AotPlugin({
                             tsConfigPath: "./tsconfig.json",
                             entryModule: path2.join(__dirname, "ClientApp/app/app.module.server#AppModule"),

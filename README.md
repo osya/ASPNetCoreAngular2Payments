@@ -18,7 +18,7 @@ Before creating Docker container:
 
 ```shell
 npm install
-npm run webpack:deploy
+npm run build
 ```
 
 Launching:

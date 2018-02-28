@@ -31,14 +31,8 @@
                     "jquery"
                 ];
                 const allModules = treeShakableModules.concat(nonTreeShakableModules);
-                const isDevBuild = !(env && env.prod);
+                const isDevMode = !(env && env.prod);
                 const sharedConfig = {
-                    stats: {
-                        modules: false
-                    },
-                    resolve: {
-                        extensions: [".js"]
-                    },
                     module: {
                         rules: [{
                             test: /\.(png|woff|woff2|eot|ttf|svg)(\?|$)/,
@@ -65,7 +59,7 @@
                     entry: {
                         // To keep development builds fast, include all vendor dependencies in the vendor bundle.
                         // But for production builds, leave the tree-shakable ones out so the AOT compiler can produce a smaller bundle.
-                        vendor: isDevBuild ? allModules : nonTreeShakableModules
+                        vendor: isDevMode ? allModules : nonTreeShakableModules
                     },
                     output: {
                         path: path.join(__dirname, "wwwroot", "dist")
@@ -74,7 +68,7 @@
                         rules: [{
                             test: /\.css(\?|$)/,
                             use: extractCss.extract({
-                                use: isDevBuild ? "css-loader" : "css-loader?minimize"
+                                use: isDevMode ? "css-loader" : "css-loader?minimize"
                             })
                         }]
                     },
@@ -84,7 +78,7 @@
                             path: path.join(__dirname, "wwwroot", "dist", '[name]-manifest.json'),
                             name: "[name]_[hash]"
                         })
-                    ].concat(isDevBuild ? [] : [
+                    ].concat(isDevMode ? [] : [
                         new optimize.UglifyJsPlugin()
                     ])
                 });
@@ -104,7 +98,7 @@
                     module: {
                         rules: [{
                             test: /\.css(\?|$)/,
-                            use: ["to-string-loader", isDevBuild ? "css-loader" : "css-loader?minimize"]
+                            use: ["to-string-loader", isDevMode ? "css-loader" : "css-loader?minimize"]
                         }]
                     },
                     plugins: [
@@ -112,7 +106,9 @@
                             path: path.join(__dirname, "ClientApp", "dist", "[name]-manifest.json"),
                             name: "[name]_[hash]"
                         })
-                    ]
+                    ].concat(isDevMode ? [] : [
+                        new optimize.UglifyJsPlugin()
+                    ])
                 });
 
                 return [clientBundleConfig, serverBundleConfig];
