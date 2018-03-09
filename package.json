@@ -9,7 +9,7 @@
   "scripts": {
     "dev": "webpack --config ./webpack.config.vendor.js --progress && webpack --progress ",
     "build": "webpack --env.pro --config ./webpack.config.vendor.js --progress && webpack --env.pro --progress ",
-    "test": "karma start --single-run --browsers PhantomJS ClientApp/test/karma.conf.js"
+    "test": "karma start --single-run --browsers ChromeHeadless ClientApp/test/karma.conf.js"
   },
   "dependencies": {
     "@angular/animations": "^4.0.0",
@@ -70,9 +70,7 @@
     "karma-chrome-launcher": "2.2.0",
     "karma-cli": "1.0.1",
     "karma-jasmine": "1.1.1",
-    "karma-phantomjs-launcher": "^1.0.4",
     "karma-webpack": "2.0.13",
-    "phantomjs-prebuilt": "^2.1.16",
     "postcss-loader": "2.1.1",
     "raw-loader": "0.5.1",
     "style-loader": "0.20.2",

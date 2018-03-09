@@ -1,8 +1,11 @@
-﻿language: csharp
+﻿sudo: required
+language: csharp
 solution: ASPNetCoreAngular2Payments.sln
 mono: none
 dotnet: 2.0.0
 dist: trusty
+addons:
+  chrome: stable
 script:
  - npm install
  - npm run dev

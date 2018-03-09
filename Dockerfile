@@ -42,8 +42,6 @@ RUN buildDeps='xz-utils' \
 
 # This should be executed only for docker-compose.ci.build.yml
 # RUN apt-get update
-# RUN apt-get install bzip2	# for installing phantomjs
-# ---
 # RUN npm install
 # RUN npm run build
 
